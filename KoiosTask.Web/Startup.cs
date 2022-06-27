@@ -1,6 +1,8 @@
+using KoiosTask.Dal;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +26,11 @@ namespace KoiosTask.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddDbContext<KoiosTaskDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("KoiosTaskDbContext"),
+                    opt => opt.MigrationsAssembly("KoiosTask.Dal")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
