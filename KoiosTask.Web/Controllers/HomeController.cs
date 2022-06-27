@@ -1,4 +1,5 @@
 ﻿using KoiosTask.Web.Models;
+using KoiosTask.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,19 +13,17 @@ namespace KoiosTask.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ICountryRepository _countryRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ICountryRepository countryRepository)
         {
             _logger = logger;
+            _countryRepository = countryRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
+            var test = await _countryRepository.GetAllCountries();
             return View();
         }
 

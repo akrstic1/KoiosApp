@@ -1,4 +1,5 @@
 using KoiosTask.Dal;
+using KoiosTask.Web.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +26,10 @@ namespace KoiosTask.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services
+                .AddScoped<ICountryRepository, CountryRepository>()
+                .AddScoped<ICityRepository, CityRepository>();
+                
             services.AddControllersWithViews();
 
             services.AddDbContext<KoiosTaskDbContext>(options =>
