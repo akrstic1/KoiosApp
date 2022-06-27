@@ -14,6 +14,7 @@ namespace KoiosTask.Model
         public int Id { get; set; }
         [ForeignKey(nameof(Country))]
         public int CountryId { get; set; }
+        public Country Country { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

@@ -14,17 +14,19 @@ namespace KoiosTask.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ICountryRepository _countryRepository;
+        private readonly ICityRepository _cityRepository;
 
-        public HomeController(ILogger<HomeController> logger, ICountryRepository countryRepository)
+        public HomeController(ILogger<HomeController> logger, ICountryRepository countryRepository, ICityRepository cityRepository)
         {
             _logger = logger;
             _countryRepository = countryRepository;
+            _cityRepository = cityRepository;
         }
 
         public async Task<IActionResult> Index()
         {
-            var test = await _countryRepository.GetAllCountries();
-            return View();
+            var test = await _cityRepository.GetAllCities();
+            return View(test);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

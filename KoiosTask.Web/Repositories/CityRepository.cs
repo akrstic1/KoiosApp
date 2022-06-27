@@ -17,7 +17,9 @@ namespace KoiosTask.Web.Repositories
 
         public async Task<IEnumerable<City>> GetAllCities()
         {
-            return await _koiosTaskDbContext.Cities.ToListAsync();
+            return await _koiosTaskDbContext.Cities
+                .Include(x=>x.Country)
+                .ToListAsync();
         }
     }
 }

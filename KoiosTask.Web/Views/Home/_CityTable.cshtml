@@ -1,0 +1,26 @@
+﻿@model List<KoiosTask.Model.City>
+
+<table style="margin-top: 20px;" class="table table-condensed">
+    <thead>
+        <tr>
+            <th>City Name</th>
+            <th>Post Code</th>
+            <th>Country</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.PostCode</td>
+                <td>@item.Country.Name</td>
+                <td>
+                    <button id="editCity" data-cityid="@item.Id" class="btn btn-primary mr-1">EDIT</button>
+                    <a class="btn btn-danger" asp-action="Remove" asp-route-id="@item.Id">REMOVE</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
