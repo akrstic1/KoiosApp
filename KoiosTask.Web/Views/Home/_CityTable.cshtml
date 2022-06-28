@@ -18,7 +18,7 @@
                 <td>@item.Country.Name</td>
                 <td>
                     <button id="editCity" data-cityid="@item.Id" class="btn btn-primary mr-1">EDIT</button>
-                    <a class="btn btn-danger" asp-action="Remove" asp-route-id="@item.Id">REMOVE</a>
+                    <a class="btn btn-danger" asp-action="DeleteCity" asp-route-id="@item.Id">REMOVE</a>
                 </td>
             </tr>
         }

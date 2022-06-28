@@ -61,6 +61,15 @@ namespace KoiosTask.Web.Controllers
             return PartialView("_CityTable", newCityList);
         }
 
+        public async Task<IActionResult> DeleteCity(int id)
+        {
+            var cityToDelete = await _cityRepository.GetCityById(id);
+
+            await _cityRepository.Delete(cityToDelete);
+
+            return RedirectToAction("Index");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

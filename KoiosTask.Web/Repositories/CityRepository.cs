@@ -22,9 +22,23 @@ namespace KoiosTask.Web.Repositories
                 .ToListAsync();
         }
 
+        public async Task<City> GetCityById(int id)
+        {
+            return await _koiosTaskDbContext.Cities
+                .Include(p => p.Country)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
         public async Task Add(City cityToAdd)
         {
             await _koiosTaskDbContext.Cities.AddAsync(cityToAdd);
+
+            await _koiosTaskDbContext.SaveChangesAsync();
+        }
+
+        public async Task Delete(City cityToDelete)
+        {
+            _koiosTaskDbContext.Cities.Remove(cityToDelete);
 
             await _koiosTaskDbContext.SaveChangesAsync();
         }
