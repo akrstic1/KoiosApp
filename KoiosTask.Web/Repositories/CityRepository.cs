@@ -21,5 +21,12 @@ namespace KoiosTask.Web.Repositories
                 .Include(x=>x.Country)
                 .ToListAsync();
         }
+
+        public async Task Add(City cityToAdd)
+        {
+            await _koiosTaskDbContext.Cities.AddAsync(cityToAdd);
+
+            await _koiosTaskDbContext.SaveChangesAsync();
+        }
     }
 }

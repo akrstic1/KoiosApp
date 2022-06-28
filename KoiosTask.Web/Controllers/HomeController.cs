@@ -1,6 +1,8 @@
-﻿using KoiosTask.Web.Models;
+﻿using KoiosTask.Model;
+using KoiosTask.Web.Models;
 using KoiosTask.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -27,6 +29,36 @@ namespace KoiosTask.Web.Controllers
         {
             var test = await _cityRepository.GetAllCities();
             return View(test);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCountryDropdown()
+        {
+            List<SelectListItem> countryDropdown = new List<SelectListItem>();
+            var allCountriesList = await _countryRepository.GetAllCountries();
+
+            foreach(var country in allCountriesList)
+            {
+                countryDropdown.Add(new SelectListItem()
+                {
+                    Text = country.Name,
+                    Value = country.Id.ToString()
+                });
+            }
+
+            return PartialView("_CountryDropdown", countryDropdown);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCity(City cityToAdd)
+        {
+            List<City> newCityList = new List<City>();
+
+            await _cityRepository.Add(cityToAdd);
+
+            newCityList = (await _cityRepository.GetAllCities()).ToList();
+         
+            return PartialView("_CityTable", newCityList);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

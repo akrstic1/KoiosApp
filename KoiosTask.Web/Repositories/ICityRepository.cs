@@ -6,6 +6,7 @@ namespace KoiosTask.Web.Repositories
 {
     public interface ICityRepository
     {
+        Task Add(City cityToAdd);
         Task<IEnumerable<City>> GetAllCities();
     }
 }
