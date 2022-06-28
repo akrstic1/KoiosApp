@@ -16,8 +16,8 @@
                 <td>@item.Name</td>
                 <td>@item.PostCode</td>
                 <td>@item.Country.Name</td>
-                <td>
-                    <button id="editCity" data-cityid="@item.Id" class="btn btn-primary mr-1">EDIT</button>
+                <td> 
+                    <button data-toggle="modal" data-target="#editCityModal" data-cityid="@item.Id" data-countryid="@item.CountryId" class="btn editCityModalButton btn-primary mr-1">EDIT</button>
                     <a class="btn btn-danger" asp-action="DeleteCity" asp-route-id="@item.Id">REMOVE</a>
                 </td>
             </tr>

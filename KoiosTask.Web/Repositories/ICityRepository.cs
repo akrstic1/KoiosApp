@@ -10,5 +10,6 @@ namespace KoiosTask.Web.Repositories
         Task Delete(City cityToDelete);
         Task<IEnumerable<City>> GetAllCities();
         Task<City> GetCityById(int id);
+        Task<City> Update(City city);
     }
 }

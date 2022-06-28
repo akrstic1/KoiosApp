@@ -31,8 +31,8 @@ namespace KoiosTask.Web.Controllers
             return View(test);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetCountryDropdown()
+        [HttpPost]
+        public async Task<IActionResult> GetCountryDropdown(int idSelected = 0)
         {
             List<SelectListItem> countryDropdown = new List<SelectListItem>();
             var allCountriesList = await _countryRepository.GetAllCountries();
@@ -44,6 +44,11 @@ namespace KoiosTask.Web.Controllers
                     Text = country.Name,
                     Value = country.Id.ToString()
                 });
+            }
+
+            if(idSelected != 0)
+            {
+                countryDropdown.Find(x=>x.Value == idSelected.ToString()).Selected = true;
             }
 
             return PartialView("_CountryDropdown", countryDropdown);
@@ -59,6 +64,25 @@ namespace KoiosTask.Web.Controllers
             newCityList = (await _cityRepository.GetAllCities()).ToList();
          
             return PartialView("_CityTable", newCityList);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCity(City city)
+        {
+            List<City> newCityList = new List<City>();
+            var updatedCity = await _cityRepository.Update(city);
+         
+            newCityList = (await _cityRepository.GetAllCities()).ToList();
+
+            return PartialView("_CityTable", newCityList);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetUpdateCityForm(int cityId)
+        {
+            City cityToUpdate= await _cityRepository.GetCityById(cityId);
+
+            return PartialView("_EditCity", cityToUpdate);
         }
 
         public async Task<IActionResult> DeleteCity(int id)

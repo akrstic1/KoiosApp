@@ -36,6 +36,19 @@ namespace KoiosTask.Web.Repositories
             await _koiosTaskDbContext.SaveChangesAsync();
         }
 
+        public async Task<City> Update(City city)
+        {
+            var entity = await GetCityById(city.Id);
+
+            entity.Name = city.Name;
+            entity.PostCode = city.PostCode;
+            entity.CountryId = city.CountryId;
+
+            await _koiosTaskDbContext.SaveChangesAsync();
+
+            return entity;
+        }
+
         public async Task Delete(City cityToDelete)
         {
             _koiosTaskDbContext.Cities.Remove(cityToDelete);

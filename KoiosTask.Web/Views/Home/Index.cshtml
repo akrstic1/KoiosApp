@@ -10,7 +10,7 @@
         <label class="control-label">City name</label>
         <input type="text" name="Name" class="form-control" />
     </div>
-    
+
     <div class="form-group">
         <label class="control-label">City post code</label>
         <input type="text" name="PostCode" class="form-control" />
@@ -32,28 +32,78 @@
     <partial name="_CityTable" />
 </div>
 
+<div class="modal fade" id="editCityModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit City</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="modalBody" class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts{
-    <script>
-		$(document).ready(function () {
-			$.ajax({
-				url: "@Url.Action("GetCountryDropdown")",
-				method: "GET",
-				success: function (html) {
-					$("#selectWrapper").html(html);
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "@Url.Action("GetCountryDropdown")",
+            method: "POST",
+            success: function (html) {
+                $("#selectWrapper").html(html);
+            }
+        })
+    })
+
+    $("#add-city-form").on("click", "#add-city-button", function() {
+        $.ajax({
+                url: "@Url.Action("AddCity", "Home")",
+                method: "POST",
+                data: $("#add-city-form").serialize(),
+                success: function(html) {
+                    $("#table-container").html(html);
+                    $('#add-city-form').trigger("reset");
                 }
             })
-        })
-            
-		$("#add-city-form").on("click", "#add-city-button", function() {
-            $.ajax({
-                    url: "@Url.Action("AddCity", "Home")",
+    })
+
+     $("#modalBody").on("click", "#edit-city-submit-button", function() {
+        $.ajax({
+                url: "@Url.Action("UpdateCity", "Home")",
+                method: "POST",
+                data: $("#edit-city-form").serialize(),
+                success: function(html) {
+                    $("#table-container").html(html);
+                    $('#editCityModal').modal('toggle');
+                }
+            })
+    })
+
+    $("#table-container").on("click", ".editCityModalButton", function() {
+        let selectedCountryId = $(this).data("countryid");
+
+        $.ajax({
+            url:"@Url.Action("GetUpdateCityForm", "Home")",
+            method:"POST",
+            data:{cityId:$(this).data("cityid")},
+            success:function(html){
+                $("#modalBody").html(html);
+                $.ajax({
+                    url: "@Url.Action("GetCountryDropdown")",
                     method: "POST",
-                    data: $("#add-city-form").serialize(),
-                    success: function(html) {
-                        $("#table-container").html(html);
-                        $('#add-city-form').trigger("reset");
+                    data:{idSelected:selectedCountryId},
+                    success: function (html) {
+                        $("#edit-city-select-wrapper").html(html);
                     }
                 })
+            }
         })
-    </script>
+        })
+</script>
 } 
