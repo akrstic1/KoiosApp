@@ -1,5 +1,3 @@
-using System;
-
 namespace KoiosTask.Web.Models
 {
     public class ErrorViewModel

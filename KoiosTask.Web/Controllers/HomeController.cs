@@ -4,7 +4,6 @@ using KoiosTask.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -37,7 +36,7 @@ namespace KoiosTask.Web.Controllers
             List<SelectListItem> countryDropdown = new List<SelectListItem>();
             var allCountriesList = await _countryRepository.GetAllCountries();
 
-            foreach(var country in allCountriesList)
+            foreach (var country in allCountriesList)
             {
                 countryDropdown.Add(new SelectListItem()
                 {
@@ -46,9 +45,9 @@ namespace KoiosTask.Web.Controllers
                 });
             }
 
-            if(idSelected != 0)
+            if (idSelected != 0)
             {
-                countryDropdown.Find(x=>x.Value == idSelected.ToString()).Selected = true;
+                countryDropdown.Find(x => x.Value == idSelected.ToString()).Selected = true;
             }
 
             return PartialView("_CountryDropdown", countryDropdown);
@@ -64,7 +63,7 @@ namespace KoiosTask.Web.Controllers
             List<City> newCityList = new List<City>();
 
             newCityList = (await _cityRepository.GetAllCities()).ToList();
-         
+
             return PartialView("_CityTable", newCityList);
         }
 
@@ -93,14 +92,14 @@ namespace KoiosTask.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> GetUpdateCityForm(int cityId)
         {
-            City cityToUpdate= await _cityRepository.GetCityById(cityId);
+            City cityToUpdate = await _cityRepository.GetCityById(cityId);
 
             return PartialView("_EditCity", cityToUpdate);
         }
 
         public async Task<IActionResult> DeleteCity(int id)
         {
-            if(id != 0)
+            if (id != 0)
             {
                 var cityToDelete = await _cityRepository.GetCityById(id);
 

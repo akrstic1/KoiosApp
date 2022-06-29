@@ -1,8 +1,6 @@
 ﻿using KoiosTask.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -13,7 +11,7 @@ namespace KoiosTask.Dal
         public DbSet<City> Cities { get; set; }
         public DbSet<Country> Countries { get; set; }
 
-        public KoiosTaskDbContext(DbContextOptions<KoiosTaskDbContext> options) 
+        public KoiosTaskDbContext(DbContextOptions<KoiosTaskDbContext> options)
             : base(options)
         {
         }
@@ -31,7 +29,7 @@ namespace KoiosTask.Dal
             string jsonString = File.ReadAllText(@"../KoiosTask.Dal/Seed/countries.json");
             countries = JsonConvert.DeserializeObject<List<Country>>(jsonString);
 
-            countries.ForEach(x => { x.Id = countryId;countryId++; });
+            countries.ForEach(x => { x.Id = countryId; countryId++; });
 
             return countries;
         }
