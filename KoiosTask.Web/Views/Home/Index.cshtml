@@ -5,26 +5,7 @@
 
 <h1>Add a city</h1>
 
-<form id="add-city-form">
-    <div class="form-group">
-        <label class="control-label">City name</label>
-        <input type="text" name="Name" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">City post code</label>
-        <input type="text" name="PostCode" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Country</label>
-        <div id="selectWrapper"></div>
-    </div>
-
-    <div class="form-group">
-        <button type="button" class="btn btn-outline-success" id="add-city-button">Add</button>
-    </div>
-</form>
+<div id="add-city-form-wrapper"></div>
 
 <h1>City list</h1>
 
@@ -52,48 +33,52 @@
 @section Scripts{
 <script>
     $(document).ready(function () {
+        //ADD FORM SETUP
         $.ajax({
-            url: "@Url.Action("GetCountryDropdown")",
-            method: "POST",
+            url: "@Url.Action("GetAddCityForm")",
+            method: "GET",
             success: function (html) {
-                $("#selectWrapper").html(html);
+                //GET COUNTRY DROPDOWN
+                $("#add-city-form-wrapper").html(html);
+                $.ajax({
+                    url: "@Url.Action("GetCountryDropdown")",
+                    method: "POST",
+                    success: function (html) {
+                        $("#add-city-select-wrapper").html(html);
+                    }
+                })
+                
+                //SUBMIT LOGIC AND VALIDATION
+                $("#add-city-form").on("submit", function(e) {
+                    e.preventDefault();
+                    if ($("#add-city-form").valid()) {
+                        $.ajax({
+                            url: "@Url.Action("AddCity", "Home")",
+                            method: "POST",
+                            data: $("#add-city-form").serialize(),
+                            success: function(html) {
+                                $("#table-container").html(html);
+                                $('#add-city-form').trigger("reset");
+                            }
+                        })
+                    }
+                })
             }
-        })
+        }) 
     })
 
-    $("#add-city-form").on("click", "#add-city-button", function() {
-        $.ajax({
-                url: "@Url.Action("AddCity", "Home")",
-                method: "POST",
-                data: $("#add-city-form").serialize(),
-                success: function(html) {
-                    $("#table-container").html(html);
-                    $('#add-city-form').trigger("reset");
-                }
-            })
-    })
-
-     $("#modalBody").on("click", "#edit-city-submit-button", function() {
-        $.ajax({
-                url: "@Url.Action("UpdateCity", "Home")",
-                method: "POST",
-                data: $("#edit-city-form").serialize(),
-                success: function(html) {
-                    $("#table-container").html(html);
-                    $('#editCityModal').modal('toggle');
-                }
-            })
-    })
-
+    //EDIT FORM SETUP
     $("#table-container").on("click", ".editCityModalButton", function() {
         let selectedCountryId = $(this).data("countryid");
 
+        //GET EDIT FORM
         $.ajax({
             url:"@Url.Action("GetUpdateCityForm", "Home")",
             method:"POST",
             data:{cityId:$(this).data("cityid")},
             success:function(html){
                 $("#modalBody").html(html);
+                //GET COUNTRY DROPDOWN
                 $.ajax({
                     url: "@Url.Action("GetCountryDropdown")",
                     method: "POST",
@@ -102,8 +87,25 @@
                         $("#edit-city-select-wrapper").html(html);
                     }
                 })
+
+                //SUBMIT LOGIC AND VALIDATION
+                $("#edit-city-form").on("submit", function(e) {
+                    e.preventDefault();
+                    
+                    if ($("#edit-city-form").valid()) {
+                        $.ajax({
+                            url: "@Url.Action("UpdateCity", "Home")",
+                            method: "POST",
+                            data: $("#edit-city-form").serialize(),
+                            success: function(html) {
+                                $("#table-container").html(html);
+                                $('#editCityModal').modal('toggle');
+                            }
+                        })
+                    }
+                })
             }
         })
-        })
+    })
 </script>
 } 

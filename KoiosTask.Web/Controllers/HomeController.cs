@@ -57,9 +57,11 @@ namespace KoiosTask.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCity(City cityToAdd)
         {
+            if (ModelState.IsValid)
+            {
+                await _cityRepository.Add(cityToAdd);
+            }
             List<City> newCityList = new List<City>();
-
-            await _cityRepository.Add(cityToAdd);
 
             newCityList = (await _cityRepository.GetAllCities()).ToList();
          
@@ -69,12 +71,23 @@ namespace KoiosTask.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateCity(City city)
         {
+            if (ModelState.IsValid)
+            {
+                await _cityRepository.Update(city);
+            }
             List<City> newCityList = new List<City>();
-            var updatedCity = await _cityRepository.Update(city);
-         
+
             newCityList = (await _cityRepository.GetAllCities()).ToList();
 
             return PartialView("_CityTable", newCityList);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAddCityForm()
+        {
+            City emptyCityModel = new City();
+
+            return PartialView("_AddCity", emptyCityModel);
         }
 
         [HttpPost]
@@ -87,9 +100,12 @@ namespace KoiosTask.Web.Controllers
 
         public async Task<IActionResult> DeleteCity(int id)
         {
-            var cityToDelete = await _cityRepository.GetCityById(id);
+            if(id != 0)
+            {
+                var cityToDelete = await _cityRepository.GetCityById(id);
 
-            await _cityRepository.Delete(cityToDelete);
+                await _cityRepository.Delete(cityToDelete);
+            }
 
             return RedirectToAction("Index");
         }
